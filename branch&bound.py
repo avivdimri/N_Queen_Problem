@@ -4,6 +4,7 @@ matrix = [[0 for i in range(101)] for i in range(101)]
 row = [0 for i in range(101)]
 forwardDiagonal = [0 for i in range(201)]
 backwardDiagonal = [0 for i in range(201)]
+iter = 0
 
 
 def checkRow(row, n):
@@ -54,40 +55,45 @@ def Mark(row1, col1, n, arg):
 
 
 def nqueens_branc_bound(n, col):
+    global iter
     for row in range(1, n + 1):
-        if Check(row, col, n) == False:
+        iter += 1
+        if not Check(row, col, n):
             matrix[row][col] = 1
             Mark(row, col, n, True)
             if col == n:
                 return True
             flag = nqueens_branc_bound(n, col + 1)
-            if flag == False:
+            if not flag:
                 matrix[row][col] = 0
                 Mark(row, col, n, False)
             else:
                 return True
     return False
 
+
 def solve():
-    global matrix, row, forwardDiagonal, backwardDiagonal
+    global matrix, row, forwardDiagonal, backwardDiagonal, iter
     n = 32
     sum = 0
-    for k in range(10):
+    sum_iter = 0
+    for k in range(1):
         matrix = [[0 for i in range(101)] for i in range(101)]
         row = [0 for i in range(101)]
         forwardDiagonal = [0 for i in range(201)]
         backwardDiagonal = [0 for i in range(201)]
+        iter = 0
         tic = time.perf_counter()
         sol = nqueens_branc_bound(n, 1)
         toc = time.perf_counter()
         if (not sol):
             print("Solution does not exist")
         sum += toc - tic
+        sum_iter += iter
         print(f"{toc - tic:0.4f}")
-    sum /= 10
-    print(f"solve the n-queen problem in branch and bound take in avg of 10 executions: {sum:0.4f} seconds")
-
-
+    sum /= 1
+    sum_iter /= 1
+    print(f"solve the n-queen problem in branch and bound take in avg of 10 executions: {sum:0.4f} seconds with num iter {sum_iter}")
 
 
 solve()

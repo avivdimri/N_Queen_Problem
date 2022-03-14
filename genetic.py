@@ -31,7 +31,7 @@ class GeneticChess:
         return DNA
 
     def initializeFirstGenereation(self):
-        for i in range(100):
+        for i in range(200):
             self.env.append(self.genereteDNA())
 
     def utilityFunction(self, gen):
@@ -102,17 +102,15 @@ class GeneticChess:
         gen[leftSideIndex], gen[RightSideIndex] = gen[RightSideIndex], gen[leftSideIndex]
         return gen
 
-    def crossOverAndMutant(self,f):
+    def crossOverAndMutant(self):
         for i in range(1, len(self.env), 2):
             firstGen = self.env[i - 1][:]
             secondGen = self.env[i][:]
-            if f:
-                print(f"firstGen is {firstGen} second gen is {secondGen}")
+
             self.crossOverGens(firstGen, secondGen)
             firstGen = self.MutantGen(firstGen)
             secondGen = self.MutantGen(secondGen)
-            if f:
-                print(f"firstGen is {firstGen} second gen is {secondGen}")
+
             self.env.append(firstGen)
             self.env.append(secondGen)
 
@@ -143,11 +141,8 @@ class GeneticChess:
             if self.isGoalGen(gen):
                 return gen, 0
         count = 0
-        f = False
-        while count < 100:
-            if count >50:
-                f = True
-            self.crossOverAndMutant(f)
+        while count <3000:
+            self.crossOverAndMutant()
             self.env = self.makeSelection()
             count += 1
             if self.goalIndex >= 0:
@@ -162,15 +157,17 @@ class GeneticChess:
 
 
 sum = 0
+sum_iter =0
 j = 0
-n=8
-for i in range(10):
+n=16
+for i in range(20):
     start = time.perf_counter()
     chess = GeneticChess(n)
     solution, iter = chess.solveGA()
     end = time.perf_counter()
     if solution:
         sum += end - start
+        sum_iter += iter
         j += 1
         print(f"Runtime in second:, {end - start:0.4f} with {iter} iterations")
         # print(f"solution is {solution}")
@@ -179,5 +176,7 @@ for i in range(10):
 
 if j > 0:
     sum /= j
-print(f"solve the n-queen problem in genetic take in avg of {j} executions: {sum:0.4f} seconds")
+    sum_iter /= j
+
+print(f"solve the n-queen problem in genetic take in avg of {j} executions: {sum:0.4f} seconds and {sum_iter} iterations")
 

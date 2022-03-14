@@ -3,8 +3,8 @@ from math import exp
 import time
 from copy import deepcopy
 
-N_QUEENS = 16
-TEMPERATURE = 1000
+N_QUEENS = 1024
+TEMPERATURE = 10000
 
 
 def threat_calculate(n):
@@ -61,7 +61,7 @@ def simulated_annealing():
     t = TEMPERATURE
     sch = 0.99
     it = 0
-    while t > 0 and it < 15000:
+    while t > 0 and it < 300000:
         it +=1
         t *= sch
         successor = deepcopy(answer)
@@ -88,13 +88,15 @@ def print_chess_board(board):
 
 
 sum = 0
+sum_iter=0
 j = 0
-for i in range(1000):
+for i in range(10):
     start = time.perf_counter()
     soultion,iter = simulated_annealing()
     end =  time.perf_counter()
     if soultion:
         sum += end - start
+        sum_iter += iter
         j +=1
         print(f"Runtime in second:, {end - start:0.4f} with {iter} iterations")
         #print_chess_board(answer)
@@ -103,7 +105,8 @@ for i in range(1000):
 
 if j>0:
     sum /= j
-print(f"solve the n-queen problem in simulated annealing take in avg of {j} executions: {sum:0.4f} seconds")
+    sum_iter /= j
+print(f"solve the n-queen problem in simulated annealing take in avg of {j} executions: {sum:0.4f} seconds with {sum_iter} iterations")
 #print_chess_board(answer)
 
 
