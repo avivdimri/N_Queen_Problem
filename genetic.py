@@ -78,11 +78,6 @@ class GeneticChess:
             for i in range(bound):
                  firstGen[i],secondGen[i] = secondGen[i],firstGen[i]
 
-    # for i in range(1, len(firstGen)):
-        #     if abs(firstGen[i - 1] - firstGen[i]) < 2:
-        #         firstGen[i], secondGen[i] = secondGen[i], firstGen[i]
-        #     if abs(secondGen[i - 1] - secondGen[i]) < 2:
-        #         firstGen[i], secondGen[i] = secondGen[i], firstGen[i]
 
     def MutantGen(self, gen):
 
@@ -156,11 +151,23 @@ class GeneticChess:
         return None, count
 
 
+
+## the script run the genetic algortihm and try to solve nquuen problem
+## you can n varaible which define the size of the board
+## k is the number of iterations
+## the script print the answer if there is
+## note that if you put small numner of n you need to small also the size ot the
+# population in  initializeFirstGenereation function:
+
 sum = 0
 sum_iter =0
+k = 5
 j = 0
 n=16
-for i in range(20):
+if (n == 2 or n==3):
+    print(f"there is no solution to n=2 or n=3")
+    exit(0)
+for i in range(k):
     start = time.perf_counter()
     chess = GeneticChess(n)
     solution, iter = chess.solveGA()
@@ -170,7 +177,7 @@ for i in range(20):
         sum_iter += iter
         j += 1
         print(f"Runtime in second:, {end - start:0.4f} with {iter} iterations")
-        # print(f"solution is {solution}")
+        print(f"solution is {solution}")
     else:
         print(f"failed with {iter} iterations")
 
@@ -179,4 +186,3 @@ if j > 0:
     sum_iter /= j
 
 print(f"solve the n-queen problem in genetic take in avg of {j} executions: {sum:0.4f} seconds and {sum_iter} iterations")
-
